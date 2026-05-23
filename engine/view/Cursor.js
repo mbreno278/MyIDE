@@ -557,8 +557,9 @@ export default class Cursor {
    * @returns {void}
   */
   update() {
-    const pos = this.document.getCursor();
+    if (!this.renderer) return;
 
+    const pos = this.document.getCursor();
     const coords = this.renderer.getCursorCoordinates(pos);
 
     DOM.css(this.element, {
@@ -567,7 +568,6 @@ export default class Cursor {
       height: `${coords.height}px`,
     });
   }
-
   /**
    * Define largura.
    * @param {number} width

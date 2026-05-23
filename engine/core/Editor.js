@@ -254,7 +254,6 @@ export default class Editor {
       this.virtualScroll.update();
       this.renderer.render();
       this.renderer.renderVisibleLines?.();
-
       this.cursor.update();
     });
 
@@ -267,6 +266,10 @@ export default class Editor {
     });
 
     this.document.on("cursorChange", () => {
+      this.cursor.update();
+    });
+
+    this.dom.on("scroll", () => {
       this.cursor.update();
     });
 

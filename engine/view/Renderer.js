@@ -154,6 +154,8 @@ export default class Renderer {
     this.renderVisibleLines();
 
     this.renderGutter();
+
+    this.cursor?.update?.();
   }
 
   /**
