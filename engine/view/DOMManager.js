@@ -196,6 +196,10 @@ export default class DOMManager {
     this.textarea.autocapitalize =
       "off";
 
+    this.textarea.addEventListener("input", (e) => {
+      this.emit("input", e.target.value);
+    });
+
     /**
      * Hierarquia
      */

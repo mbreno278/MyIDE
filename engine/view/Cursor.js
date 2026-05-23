@@ -111,6 +111,8 @@ export default class Cursor {
     this._bindEvents();
 
     this.startBlink();
+
+    this.document.on("cursorChange", () => this.update());
   }
 
   /**
@@ -548,6 +550,22 @@ export default class Cursor {
         parentRect.left -
         rect.left;
     }
+  }
+
+  /**
+   * Method update: Atualiza posição do cursor com base no documento e renderer.
+   * @returns {void}
+  */
+  update() {
+    const pos = this.document.getCursor();
+
+    const coords = this.renderer.getCursorCoordinates(pos);
+
+    DOM.css(this.element, {
+      left: `${coords.x}px`,
+      top: `${coords.y}px`,
+      height: `${coords.height}px`,
+    });
   }
 
   /**

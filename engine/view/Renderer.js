@@ -194,7 +194,7 @@ export default class Renderer {
           lineIndex
         );
 
-      if (!line) {
+      if (line === undefined) {
         continue;
       }
 
@@ -259,8 +259,7 @@ export default class Renderer {
     /**
      * Conteúdo
      */
-    const content =
-      line.text || "";
+    const content = line || "";
 
     /**
      * Syntax highlight
@@ -285,7 +284,7 @@ export default class Renderer {
      */
     this.lineCache.set(
       index,
-      node.cloneNode(true)
+      node
     );
 
     return node;

@@ -137,6 +137,10 @@ export default class Editor {
           this.container,
       });
 
+    this.dom.on("input", (value) => {
+      this.document.setText(value);
+    });
+
     /**
      * Renderer
      */
@@ -175,7 +179,7 @@ export default class Editor {
         renderer:
           this.renderer
       });
-      
+
 
     /**
      * Virtual scroll
@@ -242,7 +246,30 @@ export default class Editor {
 
     this._boot();
 
+    this.renderer.invalidateAll();
+    this.virtualScroll.forceRender();
     this.renderer.render();
+    
+    this.document.on("change", () => {
+      this.virtualScroll.update();
+      this.renderer.render();
+      this.renderer.renderVisibleLines?.();
+
+      this.cursor.update();
+    });
+
+    this.events.on("document:change", () => {
+      this.virtualScroll.update();
+    });
+
+    this.document.on("change", (data) => {
+      this.events.emit("document:change", data);
+    });
+
+    this.document.on("cursorChange", () => {
+      this.cursor.update();
+    });
+
   }
 
   /**
