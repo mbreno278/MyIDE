@@ -53,6 +53,7 @@ export default class DOMManager {
     this.overlay = null;
     this.gutter = null;
     this.scroller = null;
+    this.textarea = null;
 
     /**
      * Camadas
@@ -173,6 +174,27 @@ export default class DOMManager {
         className:
           "editor-overlay",
       });
+    
+    /**
+     * Textarea invisível
+     */
+    this.textarea =
+      DOM.createElement("textarea", {
+        className:
+          "editor-textarea",
+      });
+
+    this.textarea.spellcheck =
+      false;
+
+    this.textarea.autocomplete =
+      "off";
+
+    this.textarea.autocorrect =
+      "off";
+
+    this.textarea.autocapitalize =
+      "off";
 
     /**
      * Hierarquia
@@ -200,6 +222,11 @@ export default class DOMManager {
     DOM.append(
       this.root,
       this.viewport
+    );
+
+    DOM.append(
+      this.root,
+      this.textarea
     );
 
     DOM.append(
@@ -295,6 +322,17 @@ export default class DOMManager {
         }
       );
     }
+
+    this.root.addEventListener(
+      "click",
+      () => {
+
+        if (this.textarea) {
+          this.textarea.focus();
+        }
+
+      }
+    );
   }
 
   /**

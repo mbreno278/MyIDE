@@ -31,10 +31,10 @@
   <!-- ===================================================== -->
   <!-- FAVICON -->
   <!-- ===================================================== -->
-  <link
+  <!--<link
     rel="icon"
     href="assets/icons/favicon.png"
-  />
+  />-->
 
   <!-- ===================================================== -->
   <!-- FONTS -->
@@ -164,6 +164,7 @@
       position: relative;
       overflow: hidden;
       background: var(--editor-bg);
+      cursor: text;
     }
 
     #editor {
@@ -216,6 +217,76 @@
     .loading-screen.hidden {
       display: none;
     }
+
+    .editor-textarea {
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 1px;
+      height: 1px;
+
+      opacity: 0;
+
+      resize: none;
+
+      border: none;
+      outline: none;
+
+      background: transparent;
+      color: transparent;
+
+      caret-color: transparent;
+
+      overflow: hidden;
+
+      z-index: -1;
+    }
+
+    /* ===================================================== */
+    /* CURSOR */
+    /* ===================================================== */
+
+    .editor-cursor {
+
+      position: absolute;
+
+      top: 0;
+      left: 0;
+
+      width: 2px;
+      height: 20px;
+
+      background: var(--editor-caret);
+
+      pointer-events: none;
+
+      z-index: 9999;
+
+      will-change: transform;
+
+      animation:
+        editorCursorBlink 1s step-end infinite;
+    }
+
+    /* ===================================================== */
+    /* CURSOR BLINK */
+    /* ===================================================== */
+
+    @keyframes editorCursorBlink {
+
+      0%,
+      50% {
+        opacity: 1;
+      }
+
+      51%,
+      100% {
+        opacity: 0;
+      }
+
+}
   </style>
 </head>
 
@@ -395,6 +466,12 @@ const app = new App();
 
     }
   );
+
+  const myTextarea = document.querySelector(".editor-textarea");
+
+  myTextarea.addEventListener("keyup", (event) => {
+    console.log(myTextarea.value);
+  });
 
 </script>
 

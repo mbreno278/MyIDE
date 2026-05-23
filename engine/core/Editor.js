@@ -138,15 +138,6 @@ export default class Editor {
       });
 
     /**
-     * Cursor
-     */
-    this.cursor =
-      new Cursor({
-        editor: this,
-        dom: this.dom,
-      });
-
-    /**
      * Renderer
      */
     this.renderer =
@@ -158,6 +149,33 @@ export default class Editor {
         tokenizer:
           this.tokenizer,
       });
+
+    
+    /**
+     * Cursor
+     */
+    this.cursor =
+      new Cursor({
+
+        /**
+         * Layer visual
+         */
+        container:
+          this.dom.overlay,
+
+        /**
+         * Documento
+         */
+        document:
+          this.document,
+
+        /**
+         * Renderer
+         */
+        renderer:
+          this.renderer
+      });
+      
 
     /**
      * Virtual scroll
@@ -223,6 +241,8 @@ export default class Editor {
     this._bindEvents();
 
     this._boot();
+
+    this.renderer.render();
   }
 
   /**

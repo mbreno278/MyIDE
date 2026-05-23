@@ -95,6 +95,11 @@ export default class Document {
      * Inicializa linhas
      */
     this._rebuildLines();
+    this.setText(this.text);
+
+    this.emit("change", {
+      type: "init",
+    });
   }
 
   /**
@@ -541,7 +546,7 @@ export default class Document {
    */
   _rebuildLines() {
     this.lines =
-      this.text.split(this.eol);
+      this.text.split("\n");
 
     if (this.lines.length === 0) {
       this.lines = [""];

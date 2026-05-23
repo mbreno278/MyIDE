@@ -384,7 +384,7 @@ export default class Renderer {
 
     const fragment =
       DOM.fragment();
-
+    console.log(this.viewportStart, this.viewportEnd, this.document.lineCount());
     for (
       let i =
         this.viewportStart;
