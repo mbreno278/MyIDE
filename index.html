@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <!-- ===================================================== -->
+  <!-- META -->
+  <!-- ===================================================== -->
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <!-- ===================================================== -->
+  <!-- TITLE -->
+  <!-- ===================================================== -->
+  <title>CodeEditor Pro</title>
+
+  <!-- ===================================================== -->
+  <!-- SEO -->
+  <!-- ===================================================== -->
+  <meta
+    name="description"
+    content="CodeEditor Pro - IDE Web moderna construída em JavaScript puro."
+  />
+
+  <meta
+    name="theme-color"
+    content="#1E1E1E"
+  />
+
+  <!-- ===================================================== -->
+  <!-- FAVICON -->
+  <!-- ===================================================== -->
+  <link
+    rel="icon"
+    href="assets/icons/favicon.png"
+  />
+
+  <!-- ===================================================== -->
+  <!-- FONTS -->
+  <!-- ===================================================== -->
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  />
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  />
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- ===================================================== -->
+  <!-- CSS -->
+  <!-- ===================================================== -->
+  <link
+    rel="stylesheet"
+    href="assets/css/style.css"
+  />
+
+  <!-- ===================================================== -->
+  <!-- BASE THEME -->
+  <!-- ===================================================== -->
+  <style>
+    :root {
+      --editor-bg: #1e1e1e;
+      --editor-fg: #d4d4d4;
+      --editor-border: #2d2d2d;
+      --editor-selection: #264f78;
+      --editor-line-highlight: #2a2d2e;
+      --editor-gutter: #252526;
+      --editor-caret: #ffffff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--editor-bg);
+      color: var(--editor-fg);
+      font-family: "Fira Code", monospace;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #app {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ===================================================== */
+    /* TOPBAR */
+    /* ===================================================== */
+
+    .topbar {
+      width: 100%;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: #181818;
+      border-bottom: 1px solid var(--editor-border);
+      user-select: none;
+    }
+
+    .topbar-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    /* ===================================================== */
+    /* WORKSPACE */
+    /* ===================================================== */
+
+    .workspace {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ===================================================== */
+    /* SIDEBAR */
+    /* ===================================================== */
+
+    .sidebar {
+      width: 240px;
+      background: #181818;
+      border-right: 1px solid var(--editor-border);
+      overflow: auto;
+    }
+
+    .sidebar-header {
+      padding: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--editor-border);
+    }
+
+    /* ===================================================== */
+    /* EDITOR AREA */
+    /* ===================================================== */
+
+    .editor-area {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background: var(--editor-bg);
+    }
+
+    #editor {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ===================================================== */
+    /* STATUS BAR */
+    /* ===================================================== */
+
+    .statusbar {
+      width: 100%;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      background: #007acc;
+      color: white;
+      font-size: 12px;
+      user-select: none;
+    }
+
+    .statusbar-left,
+    .statusbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    /* ===================================================== */
+    /* LOADING */
+    /* ===================================================== */
+
+    .loading-screen {
+      position: absolute;
+      inset: 0;
+      background: #1e1e1e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+
+    .loading-screen.hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===================================================== -->
+  <!-- APP -->
+  <!-- ===================================================== -->
+
+  <div id="app">
+
+    <!-- =================================================== -->
+    <!-- TOPBAR -->
+    <!-- =================================================== -->
+
+    <header class="topbar">
+      <div class="topbar-title">
+        CodeEditor Pro
+      </div>
+    </header>
+
+    <!-- =================================================== -->
+    <!-- WORKSPACE -->
+    <!-- =================================================== -->
+
+    <main class="workspace">
+
+      <!-- =============================================== -->
+      <!-- SIDEBAR -->
+      <!-- =============================================== -->
+
+      <aside class="sidebar">
+
+        <div class="sidebar-header">
+          Explorer
+        </div>
+
+      </aside>
+
+      <!-- =============================================== -->
+      <!-- EDITOR -->
+      <!-- =============================================== -->
+
+      <section class="editor-area">
+
+        <!-- Loading -->
+        <div
+          id="loading"
+          class="loading-screen"
+        >
+          Inicializando Editor...
+        </div>
+
+        <!-- Editor Root -->
+        <div id="editor"></div>
+
+      </section>
+
+    </main>
+
+    <!-- =================================================== -->
+    <!-- STATUSBAR -->
+    <!-- =================================================== -->
+
+    <footer class="statusbar">
+
+      <div class="statusbar-left">
+
+        <span id="status-language">
+          Plain Text
+        </span>
+
+        <span id="status-position">
+          Ln 1, Col 1
+        </span>
+
+      </div>
+
+      <div class="statusbar-right">
+
+        <span id="status-encoding">
+          UTF-8
+        </span>
+
+        <span id="status-indent">
+          Spaces: 4
+        </span>
+
+      </div>
+
+    </footer>
+
+  </div>
+
+  <!-- ===================================================== -->
+  <!-- SCRIPT -->
+  <!-- ===================================================== -->
+
+<script type="module">
+
+  import Editor from "./engine/core/Editor.js";
+
+  /**
+   * Código inicial
+   */
+  const initialCode = `/**
+ * CodeEditor Pro
+ */
+
+class App {
+
+  constructor() {
+    console.log("Editor iniciado");
+  }
+
+}
+
+const app = new App();
+`;
+
+  /**
+   * Inicializa editor
+   */
+  const editor = new Editor(
+    "#editor",
+    {
+      language: "javascript",
+      theme: "dark",
+      debug: true,
+      value: initialCode
+    }
+  );
+
+  /**
+   * Exposição global
+   */
+  window.editor = editor;
+
+  /**
+   * Atualiza statusbar
+   */
+  editor.on(
+    "cursor:move",
+    position => {
+
+      const status =
+        document.getElementById(
+          "status-position"
+        );
+
+      if (!status) {
+        return;
+      }
+
+      status.textContent =
+        `Ln ${position.line + 1}, Col ${position.column + 1}`;
+    }
+  );
+
+  /**
+   * Remove loading
+   */
+  window.addEventListener(
+    "load",
+    () => {
+
+      const loading =
+        document.getElementById(
+          "loading"
+        );
+
+      if (loading) {
+        loading.classList.add(
+          "hidden"
+        );
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
